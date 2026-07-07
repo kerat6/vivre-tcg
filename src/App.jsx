@@ -24,12 +24,14 @@ function App() {
 
 
 return (
-  <div>
+
+  <div className="grid grid-cols-4 gap-4">
 {cards.map(card => (
-  <img key={card.card_image_id} src={card.card_image} alt={card.card_name} />
+  <img className="w-full" key={card.card_image_id} src={card.card_image} alt={card.card_name} />
 ))}
   </div>
 )
+
 }
 
 export default App
