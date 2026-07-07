@@ -12,7 +12,7 @@ function App() {
   // the empty array [] at the end means "only run this once, not on every re-render"
   useEffect(() => {
   // fetch() sends a request to the api and returns a response
-    fetch('https://optcgapi.com/api/sets/card/OP01-001/')
+    fetch('https://optcgapi.com/api/sets/OP-01/')
     // the raw response isn't usable JSON yet, .json() converts it
     .then(response=>response.json())
     // once we have the data, store it in the cards state variable
