@@ -13,8 +13,40 @@ function App() {
   // setSearchTerm = the function we call to update it every time the user types
   const [searchTerm, setSearchTerm] = useState('')
 
+  // selectedColors = the current array of colors selected for filtering (starts empty)
+  // setSelectedColors = the function we call to update it when a color button is clicked
   const [selectedColors, setSelectedColors] = useState([])
 
+  // normalize() is a helper function that converts a string to lowercase and removes spaces, making it easier to compare strings in a case-insensitive way.
+  // the /g at the end of the regex means "global", so it replaces all spaces, not just the first one.
+  const normalize = (str) => str.toLowerCase().replace(/ /g, '')
+
+  
+  const cardMatchesTerm = (card, term) => {
+    return (
+      card.card_name.toLowerCase().includes(term) ||
+      card.card_set_id.toLowerCase().includes(term) ||
+      normalize(card.sub_types).includes(normalize(term))
+    )
+  }
+
+
+  const cardMatchesSearch = (card, searchTerm) => {
+    // handle empty search - everything matches
+    if (searchTerm.trim() === '') return true
+
+    return searchTerm
+    .split('||')
+    .some(group =>
+      group
+      .split('&&')
+      .every(term => cardMatchesTerm(card, term.trim().toLowerCase()))
+    )
+  }
+  
+
+
+  // toggleColor() is used to filter the cards by color. 
   const toggleColor = (color) => {
     if (selectedColors.includes(color)) {
       // if the color is already selected, remove it from the array
@@ -70,8 +102,7 @@ function App() {
           // makes the match case-insensitive (so "Luffy" matches "luffy").
           // The condition checks if the search term is anywhere in the card's name or set ID.
           .filter(card => (selectedColors.length === 0 || selectedColors.includes(card.card_color)) &&
-            (card.card_name.toLowerCase().includes(searchTerm.toLowerCase()) ||
-            card.card_set_id.toLowerCase().includes(searchTerm.toLowerCase())))
+            cardMatchesSearch(card, searchTerm))
           // .map() then turns each remaining card into an <img> tag.
           // The second argument to map's callback, index, is the item's
           // position in the array — used below to keep each key unique.
