@@ -8,6 +8,24 @@ function App() {
   // Whenever setCards runs, React re-renders this component with the new value
   const [cards, setCards] = useState([])
 
+
+  // searchTerm = the current text typed into the search box (starts empty)
+  // setSearchTerm = the function we call to update it every time the user types
+  const [searchTerm, setSearchTerm] = useState('')
+
+  const [selectedColors, setSelectedColors] = useState([])
+
+  const toggleColor = (color) => {
+    if (selectedColors.includes(color)) {
+      // if the color is already selected, remove it from the array
+      setSelectedColors(selectedColors.filter(c => c !== color))
+    }
+    else {
+      // if the color is not selected, add it to the array
+      setSelectedColors([...selectedColors, color])
+    }
+  }
+  
   // useEffect runs the code inside it after the component first renders
   // the empty array [] at the end means "only run this once, not on every re-render"
   useEffect(() => {
@@ -22,9 +40,6 @@ function App() {
       })
   }, [])
 
-  // searchTerm = the current text typed into the search box (starts empty)
-  // setSearchTerm = the function we call to update it every time the user types
-  const [searchTerm, setSearchTerm] = useState('')
 
   return (
     <div>
@@ -37,7 +52,15 @@ function App() {
         onChange={(e) => setSearchTerm(e.target.value)}
         placeholder="Search for a card"
       />
-
+<p></p>
+{/* Color filter buttons */}
+<button onClick={() => toggleColor('Red')}>Red</button>
+<button onClick={() => toggleColor('Blue')}>Blue</button>
+<button onClick={() => toggleColor('Green')}>Green</button>
+<button onClick={() => toggleColor('Yellow')}>Yellow</button>
+<button onClick={() => toggleColor('Purple')}>Purple</button>
+<button onClick={() => toggleColor('Black')}>Black</button>
+      <p>selected colors: {selectedColors.join(', ')}</p>
       <div className="grid grid-cols-4 gap-4">
         {/* filter cards based on search term,
         then map over the filtered cards to display them */}
@@ -46,8 +69,9 @@ function App() {
           // ones where this condition is true. .toLowerCase() on both sides
           // makes the match case-insensitive (so "Luffy" matches "luffy").
           // The condition checks if the search term is anywhere in the card's name or set ID.
-          .filter(card => card.card_name.toLowerCase().includes(searchTerm.toLowerCase()) 
-          || card.card_set_id.toLowerCase().includes(searchTerm.toLowerCase()))
+          .filter(card => (selectedColors.length === 0 || selectedColors.includes(card.card_color)) &&
+            (card.card_name.toLowerCase().includes(searchTerm.toLowerCase()) ||
+            card.card_set_id.toLowerCase().includes(searchTerm.toLowerCase())))
           // .map() then turns each remaining card into an <img> tag.
           // The second argument to map's callback, index, is the item's
           // position in the array — used below to keep each key unique.
