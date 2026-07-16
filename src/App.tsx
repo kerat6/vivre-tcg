@@ -2,6 +2,8 @@
 // useEffect lets a component run some code as a side effect of rendering, such as fetching data from an API
 import { useState, useEffect } from 'react'
 import type { Card } from './types/Card'
+import CardGrid from './components/CardGrid'
+
 function App() {
 
   // cards = the current value (starts as an empty array)
@@ -93,32 +95,11 @@ function App() {
 <button onClick={() => toggleColor('Purple')}>Purple</button>
 <button onClick={() => toggleColor('Black')}>Black</button>
       <p>Selected colors: {selectedColors.join(', ')}</p>
-      <div className="grid grid-cols-4 gap-4">
-        {/* filter cards based on search term,
-        then map over the filtered cards to display them */}
-        {cards
-          // .filter() runs first, checking every card and keeping only the
-          // ones where this condition is true. .toLowerCase() on both sides
-          // makes the match case-insensitive (so "Luffy" matches "luffy").
-          // The condition checks if the search term is anywhere in the card's name or set ID.
-          .filter(card => (selectedColors.length === 0 || selectedColors.includes(card.card_color)) &&
-            cardMatchesSearch(card, searchTerm))
-          // .map() then turns each remaining card into an <img> tag.
-          // The second argument to map's callback, index, is the item's
-          // position in the array — used below to keep each key unique.
-          .map((card, index) => (
-            <img
-              className="w-full"
-              // React requires a unique "key" per item in a list, so it can
-              // track which element is which across re-renders. card_image_id
-              // alone isn't always unique in this dataset (some cards share
-              // one), so we combine it with the array index as a tiebreaker.
-              key={`${card.card_image_id}-${index}`}
-              src={card.card_image}
-              alt={card.card_name}
-            />
-          ))}
-      </div>
+      <CardGrid
+      cards={cards.filter(card => (selectedColors.length === 0 || selectedColors.includes(card.card_color))
+      && cardMatchesSearch(card, searchTerm)
+    )}
+    />
     </div>
   )
 }
