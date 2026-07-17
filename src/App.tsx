@@ -3,6 +3,7 @@
 import { useState, useEffect } from 'react'
 import type { Card } from './types/Card'
 import CardGrid from './components/CardGrid'
+import SearchBar from './components/SearchBar'
 
 function App() {
 
@@ -77,15 +78,8 @@ function App() {
 
   return (
     <div>
-      {/* "Controlled input": the input's displayed value always comes from
-          React state (searchTerm), not from the browser's own internal state.
-          onChange fires on every keystroke, reading what was typed
-          (e.target.value) and pushing it into searchTerm via setSearchTerm. */}
-      <input
-        value={searchTerm}
-        onChange={(e) => setSearchTerm(e.target.value)}
-        placeholder="Search for a card"
-      />
+      <SearchBar searchTerm = {searchTerm} setSearchTerm = {setSearchTerm} />
+
 <p></p>
 {/* Color filter buttons */}
 <button onClick={() => toggleColor('Red')}>Red</button>
