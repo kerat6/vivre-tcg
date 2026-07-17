@@ -4,6 +4,7 @@ import { useState, useEffect } from 'react'
 import type { Card } from './types/Card'
 import CardGrid from './components/CardGrid'
 import SearchBar from './components/SearchBar'
+import ColorFilter from './components/ColorFilter'
 
 function App() {
 
@@ -77,23 +78,14 @@ function App() {
 
 
   return (
-    <div>
+    <div className="space-y-4">
       <SearchBar searchTerm = {searchTerm} setSearchTerm = {setSearchTerm} />
+      <ColorFilter selectedColors = {selectedColors} toggleColor = {toggleColor}/>
 
-<p></p>
-{/* Color filter buttons */}
-<button onClick={() => toggleColor('Red')}>Red</button>
-<button onClick={() => toggleColor('Blue')}>Blue</button>
-<button onClick={() => toggleColor('Green')}>Green</button>
-<button onClick={() => toggleColor('Yellow')}>Yellow</button>
-<button onClick={() => toggleColor('Purple')}>Purple</button>
-<button onClick={() => toggleColor('Black')}>Black</button>
-      <p>Selected colors: {selectedColors.join(', ')}</p>
       <CardGrid
       cards={cards.filter(card => (selectedColors.length === 0 || selectedColors.includes(card.card_color))
-      && cardMatchesSearch(card, searchTerm)
-    )}
-    />
+      && cardMatchesSearch(card, searchTerm))}
+      />
     </div>
   )
 }
