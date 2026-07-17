@@ -24,7 +24,7 @@ function App() {
 
   // normalize() is a helper function that converts a string to lowercase and removes spaces, making it easier to compare strings in a case-insensitive way.
   // the /g at the end of the regex means "global", so it replaces all spaces, not just the first one.
-  const normalize = (str: string) => str.toLowerCase().replace(/ /g, '')
+  const normalize = (str: string | null | undefined) => (str ?? '').toLowerCase().replace(/ /g, '')
 
   
   const cardMatchesTerm = (card: Card, term: string) => {
