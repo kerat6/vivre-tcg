@@ -7,8 +7,8 @@ async function importCards() {
 
     for (const card of cards) {
         await pool.query(
-            `INSERT INTO cards (card_name, card_set_id, card_color, card_image, card_image_id, sub_types, market_price)
-            VALUES ($1, $2, $3, $4, $5, $6, $7)`,
+            `INSERT INTO cards (card_name, card_set_id, card_color, card_image, card_image_id, sub_types, market_price, set_id)
+            VALUES ($1, $2, $3, $4, $5, $6, $7, $8)`,
             [
                 card.card_name,
                 card.card_set_id,
@@ -16,7 +16,8 @@ async function importCards() {
                 card.card_image,
                 card.card_image_id,
                 card.sub_types,
-                card.market_price
+                card.market_price,
+                card.set_id
             ]
         )
     }

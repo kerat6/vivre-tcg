@@ -8,6 +8,6 @@ CREATE TABLE cards (
     card_image TEXT,
     card_image_id TEXT,
     sub_types TEXT,
-    market_price  NUMERIC(10, 2)
+    market_price  NUMERIC(10, 2),
+    set_id TEXT
 )
-    
