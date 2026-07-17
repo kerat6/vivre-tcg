@@ -10,3 +10,4 @@ CREATE TABLE cards (
     sub_types TEXT,
     market_price  NUMERIC(10, 2)
 )
+    

@@ -1,6 +1,6 @@
-export function getAllCards() {
-    return [
-        {card_name: 'Test Card 1'},
-        {card_name: 'Test Card 2'}
-    ]
+import { pool } from "../db"
+
+export async function getAllCards() {
+    const result = await pool.query('SELECT * FROM cards')
+    return result.rows
 }
