@@ -22,34 +22,6 @@ function App() {
   // setSelectedColors = the function we call to update it when a color button is clicked
   const [selectedColors, setSelectedColors] = useState<string[]>([])
 
-  // normalize() is a helper function that converts a string to lowercase and removes spaces, making it easier to compare strings in a case-insensitive way.
-  // the /g at the end of the regex means "global", so it replaces all spaces, not just the first one.
-  const normalize = (str: string | null | undefined) => (str ?? '').toLowerCase().replace(/ /g, '')
-
-  
-  const cardMatchesTerm = (card: Card, term: string) => {
-    return (
-      card.card_name.toLowerCase().includes(term) ||
-      card.card_set_id.toLowerCase().includes(term) ||
-      normalize(card.sub_types).includes(normalize(term))
-    )
-  }
-
-
-  const cardMatchesSearch = (card: Card, searchTerm: string) => {
-    // handle empty search - everything matches
-    if (searchTerm.trim() === '') return true
-
-    return searchTerm
-    .split('||')
-    .some(group =>
-      group
-      .split('&&')
-      .every(term => cardMatchesTerm(card, term.trim().toLowerCase()))
-    )
-  }
-  
-
 
   // toggleColor() is used to filter the cards by color. 
   const toggleColor = (color: string) => {
@@ -66,15 +38,23 @@ function App() {
   // useEffect runs the code inside it after the component first renders
   // the empty array [] at the end means "only run this once, not on every re-render"
   useEffect(() => {
+    const params = new URLSearchParams()
+    if(searchTerm) 
+      {params.append('search', searchTerm)
+      }
+      if(selectedColors.length > 0) 
+        {params.append('color', selectedColors.join(','))
+        }
+
     // fetch() sends a request to the api and returns a response
-    fetch('http://localhost:3000/cards')
+    fetch(`http://localhost:3000/cards?${params.toString()}`)
       // the raw response isn't usable JSON yet, .json() converts it
       .then(response => response.json() as Promise<Card[]>)
       // once we have the data, store it in the cards state variable
       .then(data => {
         setCards(data)
       })
-  }, [])
+  }, [searchTerm, selectedColors]) // the effect will re-run whenever searchTerm or selectedColors changes
 
 
   return (
@@ -82,10 +62,7 @@ function App() {
       <SearchBar searchTerm = {searchTerm} setSearchTerm = {setSearchTerm} />
       <ColorFilter selectedColors = {selectedColors} toggleColor = {toggleColor}/>
 
-      <CardGrid
-      cards={cards.filter(card => (selectedColors.length === 0 || selectedColors.includes(card.card_color))
-      && cardMatchesSearch(card, searchTerm))}
-      />
+      <CardGrid cards={cards} />
     </div>
   )
 }
