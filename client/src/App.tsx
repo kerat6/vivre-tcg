@@ -38,33 +38,36 @@ function App() {
   // useEffect runs the code inside it after the component first renders
   // the empty array [] at the end means "only run this once, not on every re-render"
   useEffect(() => {
-    const params = new URLSearchParams()
-    if(searchTerm) 
-      {params.append('search', searchTerm)
+    const timeoutId = setTimeout(() => {
+      const params = new URLSearchParams()
+      if(searchTerm) {
+        params.append('search', searchTerm)
       }
-      if(selectedColors.length > 0) 
-        {params.append('color', selectedColors.join(','))
-        }
+      if(selectedColors.length > 0) {
+        params.append('color', selectedColors.join(','))
+      }
 
-    // fetch() sends a request to the api and returns a response
-    fetch(`http://localhost:3000/cards?${params.toString()}`)
-      // the raw response isn't usable JSON yet, .json() converts it
-      .then(response => response.json() as Promise<Card[]>)
-      // once we have the data, store it in the cards state variable
-      .then(data => {
-        setCards(data)
-      })
-  }, [searchTerm, selectedColors]) // the effect will re-run whenever searchTerm or selectedColors changes
+      // fetch() sends a request to the api and returns a response
+      fetch(`http://localhost:3000/cards?${params.toString()}`)
+        // the raw response isn't usable JSON yet, .json() converts it
+        .then(response => response.json() as Promise<Card[]>)
+        // once we have the data, store it in the cards state variable
+        .then(data => {
+          setCards(data)
+        })
+    }, 250) // the 250ms delay is a debounce to avoid sending too many requests while typing
 
+    return () => clearTimeout(timeoutId)
+  }, [searchTerm, selectedColors]) // this effect runs whenever searchTerm or selectedColors changes
+    
+    return (
+      <div className="space-y-4">
+        <SearchBar searchTerm={searchTerm} setSearchTerm={setSearchTerm} />
+        <ColorFilter selectedColors={selectedColors} toggleColor={toggleColor} />
 
-  return (
-    <div className="space-y-4">
-      <SearchBar searchTerm = {searchTerm} setSearchTerm = {setSearchTerm} />
-      <ColorFilter selectedColors = {selectedColors} toggleColor = {toggleColor}/>
-
-      <CardGrid cards={cards} />
-    </div>
-  )
-}
+        <CardGrid cards={cards} />
+      </div>
+      )
+    }
 
 export default App
