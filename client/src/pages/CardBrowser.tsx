@@ -9,6 +9,7 @@ import TypeFilter from '../components/TypeFilter'
 import SetFilter from '../components/SetFilter'
 import RarityFilter from '../components/RarityFilter'
 import CounterFilter from '../components/CounterFilter'
+import Button from '../components/Button'
 
 
 interface CardBrowserProps {
@@ -149,22 +150,17 @@ function CardBrowser({ lockedColors, onCardClick, excludeType }: CardBrowserProp
          <ColorFilter selectedColors={selectedColors} toggleColor={toggleColor} />
         )}
         <TypeFilter selectedType={selectedType} toggleType={toggleType} />
-        <button
-        onClick={() => setBaseOnly(!baseOnly)}
-        className={`px-3 py-1 rounded border ${baseOnly ? 'bg-red-500 text-white' : 'bg-green-500 text-white'}`}
-        >
+        <Button onClick={() => setBaseOnly(!baseOnly)} active={baseOnly}>
             {baseOnly ? 'Variants: Hidden' : 'Variants: Shown'}
-            </button>
+            </Button>
+
         <RarityFilter selectedRarity={selectedRarity} toggleRarity={toggleRarity} />
         <div className="flex gap-3 items-center flex-wrap">
             <CounterFilter selectedCounter={selectedCounter} setSelectedCounter={setSelectedCounter} />
             <SetFilter selectedSet={selectedSet} setSelectedSet={setSelectedSet} />
-            <button
-            onClick={() => setShowPrices(!showPrices)}
-            className={`px-3 py-1 rounded border ${showPrices ? 'bg-green-500 text-white' : 'bg-red-500 text-white'}`}
-            >
+            <Button onClick={() => setShowPrices(!showPrices)} active={showPrices}>
                 {showPrices ? 'Prices: Shown' : 'Prices: Hidden'}
-                </button>
+                </Button>
                 </div>
                 <CardGrid cards={cards} onCardClick={onCardClick ?? handleCardClick} showPrices={showPrices} />
                 {zoomedCard && (

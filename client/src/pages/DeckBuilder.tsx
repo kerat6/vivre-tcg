@@ -10,6 +10,7 @@ import DeckList from "../components/DeckList"
 import { encodeDeck, exportToSimFormat } from "../utils/deckEncoding"
 import { useSearchParams } from "react-router-dom"
 import { decodeDeckString } from "../utils/deckEncoding"
+import Button from "../components/Button"
 
 function DeckBuilder() {
   const [deck, setDeck] = useState<Deck>({leader: null, cards: []})
@@ -94,16 +95,18 @@ function DeckBuilder() {
   }, [deck.leader, searchTerm, selectedColors, selectedSet]) // Only re-run the effect if the leader, searchTerm, selectedColors, or selectedSet changes
 
   if (!deck.leader) {
-    return (
-      <div>
-        <h1>Select a Leader</h1>
-        <SearchBar searchTerm={searchTerm} setSearchTerm={setSearchTerm} />
+  return (
+    <div>
+      <h1>Select a Leader</h1>
+      <SearchBar searchTerm={searchTerm} setSearchTerm={setSearchTerm} />
+      <div className="flex gap-3 items-center flex-wrap">
         <ColorFilter selectedColors={selectedColors} toggleColor={toggleColor} />
         <SetFilter selectedSet={selectedSet} setSelectedSet={setSelectedSet} />
-        <CardGrid cards={leaders} onCardClick={handleSelectedLeader} />
       </div>
-    )
-  }
+      <CardGrid cards={leaders} onCardClick={handleSelectedLeader} />
+    </div>
+  )
+}
 
   const leaderColors = deck.leader.card_color.split(' ')
 
@@ -165,19 +168,17 @@ const handleExportToSim = () => {
 
 
 return (
-  <div>
-    <button onClick={handleShareDeck}>Share Deck</button>
-    <button onClick={handleExportToSim}>Export to Simulator</button>
-    <p>Leader: {deck.leader.card_name}</p>
-    <p className={totalCards === 50 ? 'text-green-500' : 'text-red-500'}>{totalCards}/50</p>
-    <button onClick={() => setShowPrices(!showPrices)}>
+<div>
+    <Button onClick={handleShareDeck}>Share Deck</Button>
+    <Button onClick={handleExportToSim}>Export to Simulator</Button>
+    <Button onClick={() => setShowPrices(!showPrices)} active={showPrices}>
       {showPrices ? 'Prices: Shown' : 'Prices: Hidden'}
-    </button>
-    {showPrices && <p>Total: ${totalPrice.toFixed(2)}</p>}
-    <DeckList leader={deck.leader} cards={deck.cards} onRemoveCard={handleRemoveCard} showPrices={showPrices} />
-    <h2>Add Cards</h2>
-    <CardBrowser lockedColors={leaderColors} onCardClick={handleAddCard} excludeType="Leader" />
-  </div>
+      </Button> 
+      {showPrices && <p>Total: ${totalPrice.toFixed(2)}</p>}
+      <DeckList leader={deck.leader} cards={deck.cards} onRemoveCard={handleRemoveCard} showPrices={showPrices} />
+      <h2>Add Cards</h2>
+      <CardBrowser lockedColors={leaderColors} onCardClick={handleAddCard} excludeType="Leader" />
+      </div>
 )
 
 }
