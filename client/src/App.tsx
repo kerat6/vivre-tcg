@@ -5,6 +5,7 @@ import type { Card } from './types/Card'
 import CardGrid from './components/CardGrid'
 import SearchBar from './components/SearchBar'
 import ColorFilter from './components/ColorFilter'
+import TypeFilter from './components/TypeFilter'
 
 function App() {
 
@@ -22,7 +23,6 @@ function App() {
   // setSelectedColors = the function we call to update it when a color button is clicked
   const [selectedColors, setSelectedColors] = useState<string[]>([])
 
-
   // toggleColor() is used to filter the cards by color. 
   const toggleColor = (color: string) => {
     if (selectedColors.includes(color)) {
@@ -34,10 +34,34 @@ function App() {
       setSelectedColors([...selectedColors, color])
     }
   }
+
+  // selectedType = the current type selected for filtering (starts empty)
+  // toggleType() is used to filter the cards by type.
+const [selectedType, setSelectedType] = useState('')
+
+  const toggleType = (type: string) => {
+    if (selectedType === type) {
+      setSelectedType('')
+    } else {
+      setSelectedType(type)
+    }
+  }
+
+
+  // excludeAltArt = the current state of the "Exclude Alternate Art" filter (starts as true)
+  const [baseOnly, setBaseOnly] = useState(true)
+
+
   
   // useEffect runs the code inside it after the component first renders
   // the empty array [] at the end means "only run this once, not on every re-render"
   useEffect(() => {
+    // Don't fetch anything if the search term is empty and no colors are selected
+    if (!searchTerm && selectedColors.length === 0 && !selectedType) {
+      setCards([]) // clear the cards if no filters are applied
+      return
+    }
+
     const timeoutId = setTimeout(() => {
       const params = new URLSearchParams()
       if(searchTerm) {
@@ -45,6 +69,12 @@ function App() {
       }
       if(selectedColors.length > 0) {
         params.append('color', selectedColors.join(','))
+      }
+      if(selectedType) {
+        params.append('type', selectedType)
+      }
+      if(baseOnly) {
+        params.append('baseOnly', 'true')
       }
 
       // fetch() sends a request to the api and returns a response
@@ -58,13 +88,16 @@ function App() {
     }, 250) // the 250ms delay is a debounce to avoid sending too many requests while typing
 
     return () => clearTimeout(timeoutId)
-  }, [searchTerm, selectedColors]) // this effect runs whenever searchTerm or selectedColors changes
+  }, [searchTerm, selectedColors, selectedType, baseOnly]) // this effect runs whenever searchTerm, selectedColors, selectedType, or baseOnly changes
     
     return (
       <div className="space-y-4">
         <SearchBar searchTerm={searchTerm} setSearchTerm={setSearchTerm} />
         <ColorFilter selectedColors={selectedColors} toggleColor={toggleColor} />
-
+        <TypeFilter selectedType={selectedType} toggleType={toggleType} />
+        <button onClick={() => setBaseOnly(!baseOnly)}>
+          {baseOnly ? 'Variants: Hidden' : 'Variants: Shown'}
+        </button>
         <CardGrid cards={cards} />
       </div>
       )

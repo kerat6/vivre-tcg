@@ -8,7 +8,8 @@ export async function getCards(req: Request, res: Response) {
         (req.query.color as string | undefined)?.split(','),
         req.query.type as string | undefined,
         req.query.rarity as string | undefined,
-        req.query.counter !== undefined ? parseInt(req.query.counter as string) : undefined
+        req.query.counter !== undefined ? parseInt(req.query.counter as string) : undefined,
+        req.query.baseOnly === 'true'
     )
     res.json(cards)
 }

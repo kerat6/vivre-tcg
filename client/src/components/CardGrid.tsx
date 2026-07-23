@@ -20,6 +20,7 @@ function CardGrid({ cards }: CardGridProps) {
               key={`${card.card_image_id}-${index}`}
               src={card.card_image}
               alt={card.card_name}
+              loading="lazy"
             />
           ))}
       </div>
