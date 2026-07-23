@@ -11,8 +11,8 @@ async function importCards() {
 
         try {
             await pool.query(
-                `INSERT INTO cards (card_name, card_set_id, card_color, card_image, card_image_id, sub_types, market_price, set_id, card_type, card_cost, counter_amount, rarity)
-                VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12)`,
+                `INSERT INTO cards (card_name, card_set_id, card_color, card_image, card_image_id, sub_types, market_price, set_id, card_type, card_cost, counter_amount, rarity, set_name)
+                VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12, $13)`,
                 [
                     card.card_name,
                     card.card_set_id,
@@ -26,6 +26,7 @@ async function importCards() {
                     cardCost,
                     card.counter_amount,
                     card.rarity,
+                    card.set_name
                 ]
             )
             successCount++;

@@ -13,5 +13,6 @@ CREATE TABLE cards (
     card_type TEXT,
     card_cost INTEGER,
     counter_amount INTEGER,
-    rarity TEXT
+    rarity TEXT,
+    set_name TEXT
 );
