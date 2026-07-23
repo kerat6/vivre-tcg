@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react"
-import type { Deck } from "../types/Deck"
+import type { Deck, DeckCard } from "../types/Deck"
 import type { Card } from "../types/Card"
 import CardGrid from "../components/CardGrid"
 import SearchBar from "../components/SearchBar"
@@ -8,7 +8,8 @@ import SetFilter from "../components/SetFilter"
 import CardBrowser from "./CardBrowser"
 import DeckList from "../components/DeckList"
 import { encodeDeck } from "../utils/deckEncoding"
-
+import { useSearchParams } from "react-router-dom"
+import { decodeDeckString } from "../utils/deckEncoding"
 
 function DeckBuilder() {
   const [deck, setDeck] = useState<Deck>({leader: null, cards: []})
@@ -17,6 +18,34 @@ function DeckBuilder() {
   const [selectedColors, setSelectedColors] = useState<string[]>([])
   const [selectedSet, setSelectedSet] = useState('')
   const totalCards = deck.cards.reduce((sum, dc) => sum + dc.quantity, 0)
+  const [searchParams] = useSearchParams()
+
+  // On component mount, check if there's a deck string in the URL and decode it
+  useEffect(() => {
+  const leaderId = searchParams.get('leader')
+  const deckString = searchParams.get('deck')
+
+  if (!leaderId) return
+
+  const entries = deckString ? decodeDeckString(deckString) : []
+  const allIds = [leaderId, ...entries.map(e => e.cardImageId)]
+
+  fetch(`http://localhost:3000/cards/batch?ids=${allIds.join(',')}`)
+    .then(response => response.json() as Promise<Card[]>)
+    .then(data => {
+      const leaderCard = data.find(c => c.card_image_id === leaderId)
+      if (!leaderCard) return
+
+      const cards = entries.map(entry => {
+        const card = data.find(c => c.card_image_id === entry.cardImageId)
+        return card ? { card, quantity: entry.quantity } : null
+      }).filter((dc): dc is DeckCard => dc !== null)
+
+      setDeck({ leader: leaderCard, cards })
+    })
+}, [])
+
+
 
   const handleSelectedLeader = (card: Card) => {
     setDeck({...deck, leader: card})

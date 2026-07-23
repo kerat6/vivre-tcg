@@ -65,3 +65,11 @@ export async function getAllCards(search?: string, colors?: string[], type?: str
     const result = await pool.query(query, values)
     return result.rows
 }
+
+
+export async function getCardsByImageIds(imageIds: string[]) {
+    const placeholders = imageIds.map((_, index) => `$${index + 1}`).join(', ')
+    const result = await pool.query(`SELECT * FROM cards WHERE card_image_id IN (${placeholders})`, imageIds)
+    return result.rows
+}
+

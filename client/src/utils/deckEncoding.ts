@@ -9,3 +9,13 @@ export function encodeDeck(deck: Deck): string {
 
     return `leader=${deck.leader.card_image_id}&deck=${cardsString}`
 }
+
+export function decodeDeckString(deckString: string) {
+  return deckString.split('|').map(entry => {
+    const [quantityStr, cardImageId] = entry.split('x')
+    return {
+      cardImageId,
+      quantity: Number(quantityStr)
+    }
+  })
+}

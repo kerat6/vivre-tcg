@@ -1,5 +1,5 @@
 import type { Request, Response } from "express";
-import { getAllCards } from "../models/cardsModel";
+import { getAllCards, getCardsByImageIds } from "../models/cardsModel";
 
 export async function getCards(req: Request, res: Response) {
     // If a name query parameter is provided, it will be used to filter the cards by name.
@@ -13,5 +13,12 @@ export async function getCards(req: Request, res: Response) {
         req.query.set as string | undefined,
         req.query.excludeType as string | undefined
     )
+    res.json(cards)
+}
+
+
+export async function getCardsBatch(req: Request, res: Response) {
+    const ids = (req.query.ids as string)?.split(',') ?? []
+    const cards = await getCardsByImageIds(ids)
     res.json(cards)
 }
