@@ -149,15 +149,21 @@ function CardBrowser({ lockedColors, onCardClick, excludeType }: CardBrowserProp
          <ColorFilter selectedColors={selectedColors} toggleColor={toggleColor} />
         )}
         <TypeFilter selectedType={selectedType} toggleType={toggleType} />
-        <button onClick={() => setBaseOnly(!baseOnly)}>
-          {baseOnly ? 'Variants: Hidden' : 'Variants: Shown'}
-        </button>
+        <button
+        onClick={() => setBaseOnly(!baseOnly)}
+        className={`px-3 py-1 rounded border ${baseOnly ? 'bg-red-500 text-white' : 'bg-green-500 text-white'}`}
+        >
+            {baseOnly ? 'Variants: Hidden' : 'Variants: Shown'}
+            </button>
         <RarityFilter selectedRarity={selectedRarity} toggleRarity={toggleRarity} />
         <CounterFilter selectedCounter={selectedCounter} setSelectedCounter={setSelectedCounter} />
         <SetFilter selectedSet={selectedSet} setSelectedSet={setSelectedSet} />
-        <button onClick={() => setShowPrices(!showPrices)}>
+        <button
+        onClick={() => setShowPrices(!showPrices)}
+        className={`px-3 py-1 rounded border ${showPrices ? 'bg-green-500 text-white' : 'bg-red-500 text-white'}`}
+        >
             {showPrices ? 'Prices: Shown' : 'Prices: Hidden'}
-        </button>
+            </button>
         <CardGrid cards={cards} onCardClick={onCardClick ?? handleCardClick} showPrices={showPrices} />
 
         {zoomedCard && (
