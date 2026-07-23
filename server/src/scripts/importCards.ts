@@ -2,7 +2,7 @@ import { pool } from "../db"
 
 async function importCards() {
     const response = await fetch("https://optcgapi.com/api/allSetCards/")
-    const cards = await response.json()
+    const cards = await response.json() as any[]
     
     let successCount = 0;
 
