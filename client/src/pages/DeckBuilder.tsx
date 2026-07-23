@@ -7,7 +7,7 @@ import ColorFilter from "../components/ColorFilter"
 import SetFilter from "../components/SetFilter"
 import CardBrowser from "./CardBrowser"
 import DeckList from "../components/DeckList"
-import { encodeDeck } from "../utils/deckEncoding"
+import { encodeDeck, exportToSimFormat } from "../utils/deckEncoding"
 import { useSearchParams } from "react-router-dom"
 import { decodeDeckString } from "../utils/deckEncoding"
 
@@ -157,10 +157,17 @@ const handleShareDeck = () => {
   alert("Deck URL copied to clipboard!")
 }
 
+const handleExportToSim = () => {
+  const simFormat = exportToSimFormat(deck)
+  navigator.clipboard.writeText(simFormat)
+  alert("Deck exported to simulator format and copied to clipboard!")
+}
+
 
 return (
   <div>
     <button onClick={handleShareDeck}>Share Deck</button>
+    <button onClick={handleExportToSim}>Export to Simulator</button>
     <p>Leader: {deck.leader.card_name}</p>
     <p className={totalCards === 50 ? 'text-green-500' : 'text-red-500'}>{totalCards}/50</p>
     <button onClick={() => setShowPrices(!showPrices)}>

@@ -19,3 +19,22 @@ export function decodeDeckString(deckString: string) {
     }
   })
 }
+
+
+export function exportToSimFormat(deck: Deck): string {
+  if (!deck.leader) return ''
+
+  const combined = new Map<string, number>()
+
+  for (const dc of deck.cards) {
+    const current = combined.get(dc.card.card_set_id) ?? 0
+    combined.set(dc.card.card_set_id, current + dc.quantity)
+  }
+
+  const lines = [`1x${deck.leader.card_set_id}`]
+  for (const [cardSetId, quantity] of combined) {
+    lines.push(`${quantity}x${cardSetId}`)
+  }
+
+  return lines.join('\n')
+}
