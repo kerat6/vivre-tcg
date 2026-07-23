@@ -6,6 +6,7 @@ import SearchBar from "../components/SearchBar"
 import ColorFilter from "../components/ColorFilter"
 import SetFilter from "../components/SetFilter"
 import CardBrowser from "./CardBrowser"
+import DeckList from "../components/DeckList"
 
 function DeckBuilder() {
   const [deck, setDeck] = useState<Deck>({leader: null, cards: []})
@@ -13,7 +14,7 @@ function DeckBuilder() {
   const [searchTerm, setSearchTerm] = useState('')
   const [selectedColors, setSelectedColors] = useState<string[]>([])
   const [selectedSet, setSelectedSet] = useState('')
-
+  const totalCards = deck.cards.reduce((sum, dc) => sum + dc.quantity, 0)
 
   const handleSelectedLeader = (card: Card) => {
     setDeck({...deck, leader: card})
@@ -30,6 +31,9 @@ function DeckBuilder() {
       setSelectedColors([...selectedColors, color])
     }
   }
+
+
+  const NO_LIMIT_CARDS = ["OP16-042"]
 
 
   useEffect(() => {
@@ -67,13 +71,56 @@ function DeckBuilder() {
 
   const leaderColors = deck.leader.card_color.split(' ')
 
-  const handleAddCard = (card: Card) => {
 
+  const handleAddCard = (card: Card) => {
+  const totalOfThisCard = deck.cards
+    .filter(dc => dc.card.card_set_id === card.card_set_id)
+    .reduce((sum, dc) => sum + dc.quantity, 0)
+
+  if (!NO_LIMIT_CARDS.includes(card.card_set_id) && totalOfThisCard >= 4) {
+    alert("You can only have 4 copies of this card in your deck.")
+    return
   }
+
+  const existingVariant = deck.cards.find(dc => dc.card.card_image_id === card.card_image_id)
+
+  if (existingVariant) {
+    setDeck({
+      ...deck,
+      cards: deck.cards.map(dc =>
+        dc.card.card_image_id === card.card_image_id
+          ? { ...dc, quantity: dc.quantity + 1 }
+          : dc
+      )
+    })
+  } else {
+    setDeck({
+      ...deck,
+      cards: [...deck.cards, { card, quantity: 1 }]
+    })
+  }
+}
+
+const handleRemoveCard = (cardImageId: string) => {
+  setDeck({
+    ...deck,
+    cards: deck.cards
+      .map(dc =>
+        dc.card.card_image_id === cardImageId
+          ? { ...dc, quantity: dc.quantity - 1 }
+          : dc
+      )
+      .filter(dc => dc.quantity > 0)
+  })
+}
+
 
   return (
   <div>
     <p>Leader: {deck.leader.card_name}</p>
+    <p className={totalCards === 50 ? 'text-green-500' : 'text-red-500'}>{totalCards}/50</p>
+    <DeckList cards={deck.cards} onRemoveCard={handleRemoveCard} />
+    <h2>Add Cards</h2>
     <CardBrowser lockedColors={leaderColors} onCardClick={handleAddCard} excludeType="Leader" />
   </div>
   )

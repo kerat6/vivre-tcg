@@ -7,12 +7,11 @@ export async function getAllCards(search?: string, colors?: string[], type?: str
 
     // If a search term is provided, match it against name, setId, or type
     if (search) {
-        values.push(`%${search.replace(/ /g, '')}%`)
+        values.push(`%${search}%`)
         conditions.push(
-            `(card_name ILIKE $${values.length} OR card_set_id ILIKE $${values.length} OR REPLACE(sub_types, ' ', '') ILIKE $${values.length})`
+            `(card_name ILIKE $${values.length} OR card_set_id ILIKE $${values.length} OR sub_types ILIKE $${values.length})`
         )
     }
-
 
     // If a color filter is provided, add it to the query conditions and values.
     if(colors && colors.length > 0) {
