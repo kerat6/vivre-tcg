@@ -11,7 +11,13 @@ import RarityFilter from '../components/RarityFilter'
 import CounterFilter from '../components/CounterFilter'
 
 
-function CardBrowser() {
+interface CardBrowserProps {
+    lockedColors?: string[]
+    onCardClick?: (card: Card) => void
+    excludeType?: string
+}
+
+function CardBrowser({ lockedColors, onCardClick, excludeType }: CardBrowserProps) {
 
   // cards = the current value (starts as an empty array)
   // setCards = the function we call to update the value of cards
@@ -25,7 +31,7 @@ function CardBrowser() {
 
   // selectedColors = the current array of colors selected for filtering (starts empty)
   // setSelectedColors = the function we call to update it when a color button is clicked
-  const [selectedColors, setSelectedColors] = useState<string[]>([])
+  const [selectedColors, setSelectedColors] = useState<string[]>(lockedColors ?? [])
 
   // toggleColor() is used to filter the cards by color. 
   const toggleColor = (color: string) => {
@@ -116,6 +122,9 @@ function CardBrowser() {
       if (selectedRarity) {
         params.append('rarity', selectedRarity)
       }
+      if (excludeType) {
+            params.append('excludeType', excludeType)
+      }
 
       // fetch() sends a request to the api and returns a response
       fetch(`http://localhost:3000/cards?${params.toString()}`)
@@ -128,12 +137,14 @@ function CardBrowser() {
     }, 250) // the 250ms delay is a debounce to avoid sending too many requests while typing
 
     return () => clearTimeout(timeoutId)
-  }, [searchTerm, selectedColors, selectedType, selectedSet, baseOnly, selectedRarity, selectedCounter]) // this effect runs whenever searchTerm, selectedColors, selectedType, selectedSet, baseOnly, selectedRarity, or selectedCounter changes
+  }, [searchTerm, selectedColors, selectedType, selectedSet, baseOnly, selectedRarity, selectedCounter, excludeType]) // this effect runs whenever searchTerm, selectedColors, selectedType, selectedSet, baseOnly, selectedRarity, selectedCounter, or excludeType changes
     
     return (
       <div className="space-y-4">
         <SearchBar searchTerm={searchTerm} setSearchTerm={setSearchTerm} />
-        <ColorFilter selectedColors={selectedColors} toggleColor={toggleColor} />
+        {!lockedColors && (
+         <ColorFilter selectedColors={selectedColors} toggleColor={toggleColor} />
+        )}
         <TypeFilter selectedType={selectedType} toggleType={toggleType} />
         <button onClick={() => setBaseOnly(!baseOnly)}>
           {baseOnly ? 'Variants: Hidden' : 'Variants: Shown'}
@@ -141,13 +152,13 @@ function CardBrowser() {
         <RarityFilter selectedRarity={selectedRarity} toggleRarity={toggleRarity} />
         <CounterFilter selectedCounter={selectedCounter} setSelectedCounter={setSelectedCounter} />
         <SetFilter selectedSet={selectedSet} setSelectedSet={setSelectedSet} />
-        <CardGrid cards={cards} onCardClick={handleCardClick} />
+        <CardGrid cards={cards} onCardClick={onCardClick ?? handleCardClick} />
 
-{zoomedCard && (
-  <div onClick={() => setZoomedCard(null)} className="fixed inset-0 bg-black/70 flex items-center justify-center z-50">
-  <img src={zoomedCard.card_image} alt={zoomedCard.card_name} className="max-w-md max-h-[90vh]" />
-</div>
-)}
+        {zoomedCard && (
+            <div onClick={() => setZoomedCard(null)} className="fixed inset-0 bg-black/70 flex items-center justify-center z-50">
+                <img src={zoomedCard.card_image} alt={zoomedCard.card_name} className="max-w-md max-h-[90vh]" />
+            </div>
+        )}
 
       </div>
       )

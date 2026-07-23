@@ -1,7 +1,7 @@
 import { pool } from "../db"
 
 // This function retrieves all cards from the database, optionally using filters.
-export async function getAllCards(search?: string, colors?: string[], type?: string, rarity?: string, counter?: number, baseOnly?: boolean, setId?: string) {
+export async function getAllCards(search?: string, colors?: string[], type?: string, rarity?: string, counter?: number, baseOnly?: boolean, setId?: string, excludeType?: string) {
     const conditions: string[] = []
     const values: string[] = []
 
@@ -47,6 +47,11 @@ export async function getAllCards(search?: string, colors?: string[], type?: str
     if (setId) {
         values.push(`${setId}`)
         conditions.push(`set_id = $${values.length}`)
+    }
+
+    if (excludeType) {
+        values.push(`${excludeType}`)
+        conditions.push(`card_type != $${values.length}`)
     }
 
     // Construct the SQL query based on the provided filters.

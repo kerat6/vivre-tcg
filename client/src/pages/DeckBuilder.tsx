@@ -5,6 +5,7 @@ import CardGrid from "../components/CardGrid"
 import SearchBar from "../components/SearchBar"
 import ColorFilter from "../components/ColorFilter"
 import SetFilter from "../components/SetFilter"
+import CardBrowser from "./CardBrowser"
 
 function DeckBuilder() {
   const [deck, setDeck] = useState<Deck>({leader: null, cards: []})
@@ -13,9 +14,11 @@ function DeckBuilder() {
   const [selectedColors, setSelectedColors] = useState<string[]>([])
   const [selectedSet, setSelectedSet] = useState('')
 
+
   const handleSelectedLeader = (card: Card) => {
     setDeck({...deck, leader: card})
   }
+
 
   const toggleColor = (color: string) => {
     if (selectedColors.includes(color)) {
@@ -62,7 +65,18 @@ function DeckBuilder() {
     )
   }
 
-  return <div>Building deck with: {deck.leader.card_name}</div>
+  const leaderColors = deck.leader.card_color.split(' ')
+
+  const handleAddCard = (card: Card) => {
+
+  }
+
+  return (
+  <div>
+    <p>Leader: {deck.leader.card_name}</p>
+    <CardBrowser lockedColors={leaderColors} onCardClick={handleAddCard} excludeType="Leader" />
+  </div>
+  )
 
 }
 
