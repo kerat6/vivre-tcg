@@ -2,9 +2,10 @@ import type { Card } from '../types/Card'
 
 interface CardGridProps {
     cards: Card[]
+    onCardClick?: (card: Card) => void
 }
 
-function CardGrid({ cards }: CardGridProps) {
+function CardGrid({ cards, onCardClick }: CardGridProps) {
     return (
               <div className="grid grid-cols-4 gap-4">
         {/* filter cards based on search term,
@@ -21,6 +22,7 @@ function CardGrid({ cards }: CardGridProps) {
               src={card.card_image}
               alt={card.card_name}
               loading="lazy"
+              onClick={() => onCardClick?.(card)}
             />
           ))}
       </div>

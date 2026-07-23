@@ -40,28 +40,35 @@ function CardBrowser() {
   }
 
   // selectedType = the current type selected for filtering (starts empty)
-  // toggleType() is used to filter the cards by type.
   const [selectedType, setSelectedType] = useState('')
-  const [selectedSet, setSelectedSet] = useState('')
-
+  
+  
+  // toggleType() is used to filter the cards by type.
   const toggleType = (type: string) => {
-    if (selectedType === type) {
-      setSelectedType('')
-    } else {
-      setSelectedType(type)
+      if (selectedType === type) {
+          setSelectedType('')
+        } else {
+            setSelectedType(type)
+        }
     }
-  }
+    
+    // selectedSet = the current set selected for filtering (starts empty)
+    const [selectedSet, setSelectedSet] = useState('')
+
+    // Allow the user to zoom in on a card when clicked
+    const [zoomedCard, setZoomedCard] = useState<Card | null>(null)
 
 
   // card variant filter. base card only = true means only show base cards, false means show all cards including variants
   const [baseOnly, setBaseOnly] = useState(false)
  
-// selectedCounter = the current counter amount selected for filtering (starts empty)
+  // selectedCounter = the current counter amount selected for filtering (starts empty)
   const [selectedCounter, setSelectedCounter] = useState('')
   
   // selectedRarity = the current rarity selected for filtering (starts empty)
   const [selectedRarity, setSelectedRarity] = useState('')
-// toggleRarity() is used to filter the cards by rarity.
+  
+  // toggleRarity() is used to filter the cards by rarity.
   const toggleRarity = (rarity: string) => {
   if (selectedRarity === rarity) {
     setSelectedRarity('')
@@ -69,6 +76,12 @@ function CardBrowser() {
     setSelectedRarity(rarity)
   }
 }
+
+    const handleCardClick = (card: Card) => {
+      setZoomedCard(card)
+    }
+
+
 
   
   // useEffect runs the code inside it after the component first renders
@@ -128,7 +141,14 @@ function CardBrowser() {
         <RarityFilter selectedRarity={selectedRarity} toggleRarity={toggleRarity} />
         <CounterFilter selectedCounter={selectedCounter} setSelectedCounter={setSelectedCounter} />
         <SetFilter selectedSet={selectedSet} setSelectedSet={setSelectedSet} />
-        <CardGrid cards={cards} />
+        <CardGrid cards={cards} onCardClick={handleCardClick} />
+
+{zoomedCard && (
+  <div onClick={() => setZoomedCard(null)} className="fixed inset-0 bg-black/70 flex items-center justify-center z-50">
+  <img src={zoomedCard.card_image} alt={zoomedCard.card_name} className="max-w-md max-h-[90vh]" />
+</div>
+)}
+
       </div>
       )
     }
