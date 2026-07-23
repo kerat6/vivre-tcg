@@ -74,6 +74,9 @@ function CardBrowser({ lockedColors, onCardClick, excludeType }: CardBrowserProp
   // selectedRarity = the current rarity selected for filtering (starts empty)
   const [selectedRarity, setSelectedRarity] = useState('')
   
+  // showPrices = the current state of the price display toggle (starts as false)
+  const [showPrices, setShowPrices] = useState(false)
+
   // toggleRarity() is used to filter the cards by rarity.
   const toggleRarity = (rarity: string) => {
   if (selectedRarity === rarity) {
@@ -152,7 +155,10 @@ function CardBrowser({ lockedColors, onCardClick, excludeType }: CardBrowserProp
         <RarityFilter selectedRarity={selectedRarity} toggleRarity={toggleRarity} />
         <CounterFilter selectedCounter={selectedCounter} setSelectedCounter={setSelectedCounter} />
         <SetFilter selectedSet={selectedSet} setSelectedSet={setSelectedSet} />
-        <CardGrid cards={cards} onCardClick={onCardClick ?? handleCardClick} />
+        <button onClick={() => setShowPrices(!showPrices)}>
+            {showPrices ? 'Prices: Shown' : 'Prices: Hidden'}
+        </button>
+        <CardGrid cards={cards} onCardClick={onCardClick ?? handleCardClick} showPrices={showPrices} />
 
         {zoomedCard && (
             <div onClick={() => setZoomedCard(null)} className="fixed inset-0 bg-black/70 flex items-center justify-center z-50">

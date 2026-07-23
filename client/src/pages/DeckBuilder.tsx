@@ -19,6 +19,11 @@ function DeckBuilder() {
   const [selectedSet, setSelectedSet] = useState('')
   const totalCards = deck.cards.reduce((sum, dc) => sum + dc.quantity, 0)
   const [searchParams] = useSearchParams()
+  const [showPrices, setShowPrices] = useState(false)
+  const totalPrice = deck.cards.reduce(
+  (sum, dc) => sum + Number(dc.card.market_price) * dc.quantity,
+  0
+) + Number(deck.leader?.market_price)
 
   // On component mount, check if there's a deck string in the URL and decode it
   useEffect(() => {
@@ -153,16 +158,20 @@ const handleShareDeck = () => {
 }
 
 
-  return (
+return (
   <div>
     <button onClick={handleShareDeck}>Share Deck</button>
     <p>Leader: {deck.leader.card_name}</p>
     <p className={totalCards === 50 ? 'text-green-500' : 'text-red-500'}>{totalCards}/50</p>
-    <DeckList cards={deck.cards} onRemoveCard={handleRemoveCard} />
+    <button onClick={() => setShowPrices(!showPrices)}>
+      {showPrices ? 'Prices: Shown' : 'Prices: Hidden'}
+    </button>
+    {showPrices && <p>Total: ${totalPrice.toFixed(2)}</p>}
+    <DeckList leader={deck.leader} cards={deck.cards} onRemoveCard={handleRemoveCard} showPrices={showPrices} />
     <h2>Add Cards</h2>
     <CardBrowser lockedColors={leaderColors} onCardClick={handleAddCard} excludeType="Leader" />
   </div>
-  )
+)
 
 }
 
