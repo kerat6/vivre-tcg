@@ -3,6 +3,8 @@ import { pool } from "../db"
 async function importCards() {
     const response = await fetch("https://optcgapi.com/api/allSetCards/")
     const cards = await response.json()
+    
+    let successCount = 0;
 
     for (const card of cards) {
         const cardCost = /^\d+$/.test(card.card_cost) ? Number(card.card_cost) : null
@@ -26,12 +28,13 @@ async function importCards() {
                     card.rarity,
                 ]
             )
+            successCount++;
         } catch (error) {
             console.error(`Error Importing card ${card.card_set_id}: `, error)
         }
     }
 
-    console.log(`Imported ${cards.length} cards.`)
+    console.log(`Imported ${successCount} out of ${cards.length} cards.`)
     await pool.end()
 }
 

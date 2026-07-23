@@ -1,4 +1,4 @@
-Create DATABASE vivre_tcg;
+CREATE DATABASE vivre_tcg;
 
 CREATE TABLE cards (
     id SERIAL PRIMARY KEY,
@@ -8,6 +8,10 @@ CREATE TABLE cards (
     card_image TEXT,
     card_image_id TEXT,
     sub_types TEXT,
-    market_price  NUMERIC(10, 2),
-    set_id TEXT
-)
+    market_price NUMERIC(10, 2),
+    set_id TEXT,
+    card_type TEXT,
+    card_cost INTEGER,
+    counter_amount INTEGER,
+    rarity TEXT
+);
