@@ -8,7 +8,7 @@ interface CardGridProps {
 
 function CardGrid({ cards, onCardClick, showPrices }: CardGridProps) {
     return (
-    <div className="grid grid-cols-4 gap-6">
+    <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-4">
       {/* filter cards based on search term,
       then map over the filtered cards to display them */}
       {cards
