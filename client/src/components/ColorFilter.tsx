@@ -22,7 +22,7 @@ function ColorFilter({ selectedColors, toggleColor }: ColorFilterProps) {
 
 
     return (
-    <div>
+    <div className="flex gap-2 flex-wrap">
             <button onClick={() => toggleColor('Red')} className={getColorButtonClass('Red')}>Red</button>
             <button onClick={() => toggleColor('Blue')} className={getColorButtonClass('Blue')}>Blue</button>
             <button onClick={() => toggleColor('Green')} className={getColorButtonClass('Green')}>Green</button>

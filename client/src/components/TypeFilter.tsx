@@ -19,9 +19,9 @@
             return `px-3 py-1 rounded border ${isSelected ? 'bg-green-500 text-white' : 'bg-white text-gray-700'}`
         }
 
-        
+
         return (
-        <div>
+        <div className="flex gap-2 flex-wrap">
                 <button onClick={() => toggleType('Leader')} className={getTypeButtonClass('Leader')}>Leader</button>
                 <button onClick={() => toggleType('Character')} className={getTypeButtonClass('Character')}>Character</button>
                 <button onClick={() => toggleType('Event')} className={getTypeButtonClass('Event')}>Event</button>

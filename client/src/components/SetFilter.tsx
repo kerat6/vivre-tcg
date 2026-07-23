@@ -20,7 +20,7 @@ function SetFilter({ selectedSet, setSelectedSet }: SetFilterProps) {
   }, [])
 
   return (
-    <select value={selectedSet} onChange={(e) => setSelectedSet(e.target.value)}>
+    <select value={selectedSet} onChange={(e) => setSelectedSet(e.target.value)} className="border rounded px-3 py-1 bg-white text-gray-700">
       <option value="">All Sets</option>
       {sets.map(set => (
         <option key={set.set_id} value={set.set_id}>

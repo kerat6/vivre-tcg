@@ -8,13 +8,13 @@ interface CardGridProps {
 
 function CardGrid({ cards, onCardClick, showPrices }: CardGridProps) {
     return (
-    <div className="grid grid-cols-4 gap-4">
+    <div className="grid grid-cols-4 gap-6">
       {/* filter cards based on search term,
       then map over the filtered cards to display them */}
       {cards
         // .map() then turns each remaining card into an <img> tag.
         .map((card, index) => (
-          <div className="relative" key={`${card.card_image_id}-${index}`}>
+          <div className="relative transition-transform hover:scale-105 cursor-pointer" key={`${card.card_image_id}-${index}`}>
             <img
               className="w-full"
               // React requires a unique "key" per item in a list, so it can

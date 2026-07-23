@@ -21,7 +21,7 @@ function RarityFilter({ selectedRarity, toggleRarity }: RarityFilterProps) {
 
   
   return (
-    <div>
+    <div className="flex gap-2 flex-wrap">
       <button onClick={() => toggleRarity('C')} className={getRarityButtonClass('C')}>C</button>
       <button onClick={() => toggleRarity('UC')} className={getRarityButtonClass('UC')}>UC</button>
       <button onClick={() => toggleRarity('R')} className={getRarityButtonClass('R')}>R</button>

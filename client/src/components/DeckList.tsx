@@ -10,7 +10,7 @@ interface DeckListProps {
 
 function DeckList({ leader, cards, onRemoveCard, showPrices }: DeckListProps) {
   return (
-    <div className="grid grid-cols-4 gap-4">
+    <div className="grid grid-cols-4 gap-6">
       <div className="relative">
         <img className="w-full" src={leader.card_image} alt={leader.card_name} loading="lazy" />
         <span className="absolute top-1 left-1 bg-black/70 text-white text-xs px-1 rounded">

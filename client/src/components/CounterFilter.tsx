@@ -5,7 +5,7 @@ interface CounterFilterProps {
 
 function CounterFilter({ selectedCounter, setSelectedCounter }: CounterFilterProps) {
   return (
-    <select value={selectedCounter} onChange={(e) => setSelectedCounter(e.target.value)}>
+    <select value={selectedCounter} onChange={(e) => setSelectedCounter(e.target.value)} className="border rounded px-3 py-1 bg-white text-gray-700">
       <option value="">Any Counter</option>
       <option value="0">0</option>
       <option value="1000">1000</option>

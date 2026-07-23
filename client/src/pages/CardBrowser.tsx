@@ -156,23 +156,23 @@ function CardBrowser({ lockedColors, onCardClick, excludeType }: CardBrowserProp
             {baseOnly ? 'Variants: Hidden' : 'Variants: Shown'}
             </button>
         <RarityFilter selectedRarity={selectedRarity} toggleRarity={toggleRarity} />
-        <CounterFilter selectedCounter={selectedCounter} setSelectedCounter={setSelectedCounter} />
-        <SetFilter selectedSet={selectedSet} setSelectedSet={setSelectedSet} />
-        <button
-        onClick={() => setShowPrices(!showPrices)}
-        className={`px-3 py-1 rounded border ${showPrices ? 'bg-green-500 text-white' : 'bg-red-500 text-white'}`}
-        >
-            {showPrices ? 'Prices: Shown' : 'Prices: Hidden'}
-            </button>
-        <CardGrid cards={cards} onCardClick={onCardClick ?? handleCardClick} showPrices={showPrices} />
-
-        {zoomedCard && (
-            <div onClick={() => setZoomedCard(null)} className="fixed inset-0 bg-black/70 flex items-center justify-center z-50">
-                <img src={zoomedCard.card_image} alt={zoomedCard.card_name} className="max-w-md max-h-[90vh]" />
-            </div>
-        )}
-
-      </div>
+        <div className="flex gap-3 items-center flex-wrap">
+            <CounterFilter selectedCounter={selectedCounter} setSelectedCounter={setSelectedCounter} />
+            <SetFilter selectedSet={selectedSet} setSelectedSet={setSelectedSet} />
+            <button
+            onClick={() => setShowPrices(!showPrices)}
+            className={`px-3 py-1 rounded border ${showPrices ? 'bg-green-500 text-white' : 'bg-red-500 text-white'}`}
+            >
+                {showPrices ? 'Prices: Shown' : 'Prices: Hidden'}
+                </button>
+                </div>
+                <CardGrid cards={cards} onCardClick={onCardClick ?? handleCardClick} showPrices={showPrices} />
+                {zoomedCard && (
+                    <div onClick={() => setZoomedCard(null)} className="fixed inset-0 bg-black/70 flex items-center justify-center z-50">
+                        <img src={zoomedCard.card_image} alt={zoomedCard.card_name} className="max-w-md max-h-[90vh]" />
+                        </div>
+                    )}
+                    </div>
       )
     }
 
