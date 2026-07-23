@@ -7,6 +7,8 @@ import ColorFilter from "../components/ColorFilter"
 import SetFilter from "../components/SetFilter"
 import CardBrowser from "./CardBrowser"
 import DeckList from "../components/DeckList"
+import { encodeDeck } from "../utils/deckEncoding"
+
 
 function DeckBuilder() {
   const [deck, setDeck] = useState<Deck>({leader: null, cards: []})
@@ -114,9 +116,17 @@ const handleRemoveCard = (cardImageId: string) => {
   })
 }
 
+const handleShareDeck = () => {
+  const encoded = encodeDeck(deck)
+  const url = `${window.location.origin}/deck-builder?${encoded}`
+  navigator.clipboard.writeText(url)
+  alert("Deck URL copied to clipboard!")
+}
+
 
   return (
   <div>
+    <button onClick={handleShareDeck}>Share Deck</button>
     <p>Leader: {deck.leader.card_name}</p>
     <p className={totalCards === 50 ? 'text-green-500' : 'text-red-500'}>{totalCards}/50</p>
     <DeckList cards={deck.cards} onRemoveCard={handleRemoveCard} />
